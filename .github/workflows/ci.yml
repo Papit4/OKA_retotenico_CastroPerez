@@ -1,0 +1,80 @@
+name: QA Automation CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    # Nightly regression run at 03:00 UTC
+    - cron: '0 3 * * *'
+
+jobs:
+  # ── API tests (no browser, fast) ──────────────────────────────────────────
+  api-tests:
+    name: API Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright (no browsers for API)
+        run: npx playwright install --with-deps chromium
+
+      - name: Run API tests
+        run: npx playwright test tests/api --project=api --reporter=list,junit
+        env:
+          CI: true
+
+      - name: Upload API test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-results
+          path: |
+            playwright-report/
+            results/
+
+  # ── UI tests (multi-browser, parallel) ───────────────────────────────────
+  ui-tests:
+    name: UI Tests (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Run UI tests – ${{ matrix.browser }}
+        run: npx playwright test tests/ui --project=${{ matrix.browser }}
+        env:
+          CI: true
+
+      - name: Upload UI test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-results-${{ matrix.browser }}
+          path: |
+            playwright-report/
+            test-results/

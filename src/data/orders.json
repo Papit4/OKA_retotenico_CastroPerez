@@ -1,0 +1,11 @@
+{
+  "validOrder": {
+    "id": 9999,
+    "petId": 1,
+    "quantity": 2,
+    "shipDate": "2025-12-01T10:00:00.000Z",
+    "status": "placed",
+    "complete": false
+  },
+  "invalidOrderId": 99999999
+}

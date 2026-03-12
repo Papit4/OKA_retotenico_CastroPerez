@@ -1,0 +1,14 @@
+{
+  "validUser": {
+    "username": "qa_user_base",
+    "password": "P@ssw0rd123"
+  },
+  "invalidUser": {
+    "username": "no_existe_xyz99",
+    "password": "wrongpass"
+  },
+  "wrongPasswordUser": {
+    "username": "qa_user_base",
+    "password": "contraseña_incorrecta"
+  }
+}

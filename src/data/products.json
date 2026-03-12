@@ -1,0 +1,18 @@
+{
+  "phone": {
+    "name": "Samsung galaxy s6",
+    "category": "Phones"
+  },
+  "laptop": {
+    "name": "Sony vaio i5",
+    "category": "Laptops"
+  },
+  "monitor": {
+    "name": "Apple monitor 24",
+    "category": "Monitors"
+  },
+  "cartProducts": [
+    { "name": "Samsung galaxy s6", "category": "Phones" },
+    { "name": "Sony vaio i5",      "category": "Laptops" }
+  ]
+}
